@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+	images: {
+		remotePatterns: [
+			{
+				hostname: 'assets.faceit-cdn.net'
+			},
+			{
+				hostname: 'distribution.faceit-cdn.net'
+			}
+		]
+	}
+}
 
-export default nextConfig;
+export default nextConfig
