@@ -9,6 +9,11 @@ Basic stats wrapper for Overwatch Championship Series.
 
 Built with Next.js 14, React, TypeScript, Tailwind CSS, and Shadcn UI.
 
+## Todo
+
+-   [ ] Add support for multiple championships i.e different section for group stages, playoffs, etc.
+-   [ ] Update match page to be more informative
+
 ## Contributing
 
 1. Clone the repository
