@@ -70,12 +70,12 @@
 
 ::view-transition-new(root) {
 	mask: url('/assets/ow.png') center / 0 no-repeat;
-	animation: scale 1s;
+	animation: scale 0.6s;
 }
 
 ::view-transition-old(root),
 .dark::view-transition-old(root) {
-	animation: scale 1s;
+	animation: scale 0.6s;
 }
 
 @keyframes scale {
@@ -83,12 +83,12 @@
 		mask-size: 0;
 	}
 	10% {
-		mask-size: 50vmax;
+		mask-size: 20vmax;
 	}
 	90% {
-		mask-size: 50vmax;
+		mask-size: 30vmax;
 	}
 	100% {
-		mask-size: 100vmax;
+		mask-size: 80vmax;
 	}
 }

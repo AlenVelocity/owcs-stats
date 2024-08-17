@@ -9,58 +9,113 @@ export default function Matches({ matches }: { matches: ChampionshipMatches['ite
 		<div className="w-full">
 			<ul className="space-y-4">
 				{matches.map((match) => (
-					<li key={match.match_id} className="bg-muted rounded-lg p-4 shadow-md">
+					<li key={match.match_id} className="bg-muted rounded-lg md:p-3 p-4 shadow-md">
 						<Link href={`/match/${match.match_id}`} key={match.match_id}>
-							<div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center">
-								<div className="flex items-center space-x-2">
-									<Image
-										src={match.teams[teams[0]].avatar || '/assets/ow.png'}
-										alt={`logo`}
-										width={100}
-										height={100}
-										className="w-10 h-10"
-									/>
-									<span className="font-semibold truncate">{match.teams[teams[0]].name}</span>
-								</div>
-								<div className="flex items-center space-x-2">
-									<span
-										className={`text-xl font-bold ${match.results.score[teams[0]] > match.results.score[teams[1]] ? 'text-green-500' : 'text-muted-foreground'}`}
-									>
-										{match.results.score[teams[0]]}
-									</span>
-									<span className="text-xl font-bold">-</span>
-									<span
-										className={`text-xl font-bold ${match.results.score[teams[1]] > match.results.score[teams[0]] ? 'text-green-500' : 'text-muted-foreground'}`}
-									>
-										{match.results.score[teams[1]]}
-									</span>
-								</div>
-								<div className="flex items-center justify-end space-x-2">
-									<span className="font-semibold truncate">{match.teams[teams[1]].name}</span>
-									<img
-										src={match.teams[teams[1]].avatar || '/assets/ow.png'}
-										alt={`logo`}
-										className="w-10 h-10"
-									/>
-								</div>
+							<div className="flex flex-col md:grid md:grid-cols-[auto_1fr_auto_1fr_auto] md:gap-2 gap-4 items-center">
+								{teams.map((team, index) => (
+									<>
+										{index === 0 && (
+											<Image
+												src={match.teams[team].avatar || '/assets/ow.png'}
+												alt={`${match.teams[team].name} logo`}
+												width={40}
+												height={40}
+												className="md:w-8 md:h-8 w-10 h-10"
+											/>
+										)}
+										<div
+											className={`flex flex-col md:flex-row items-center ${index === 1 ? 'flex-row-reverse md:justify-end' : ''}`}
+										>
+											<span
+												className={`font-semibold truncate ${index === 1 ? 'md:text-right' : ''}`}
+											>
+												{match.teams[team].name}
+											</span>
+											{index === 1 && (
+												<Image
+													src={match.teams[team].avatar || '/assets/ow.png'}
+													alt={`${match.teams[team].name} logo`}
+													width={40}
+													height={40}
+													className="md:w-8 md:h-8 w-10 h-10 mt-2 md:mt-0 md:ml-2"
+												/>
+											)}
+										</div>
+										{index === 0 && (
+											<div className="flex items-center space-x-2 col-span-1">
+												{teams.map((scoreTeam, scoreIndex) => (
+													<span
+														key={scoreTeam}
+														className={`text-xl font-bold ${
+															match.results.score[scoreTeam] >
+															match.results.score[teams[1 - scoreIndex]]
+																? 'text-green-500'
+																: 'text-muted-foreground'
+														}`}
+													>
+														{match.results.score[scoreTeam]}
+														{scoreIndex === 0 && <span className="ml-1">{' - '}</span>}
+													</span>
+												))}
+											</div>
+										)}
+									</>
+								))}
 							</div>
-							<div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center mt-2">
+							<div className="md:hidden flex flex-wrap justify-between items-center mt-2 text-sm">
 								<div className="flex items-center space-x-2">
-									{match.status === 'ong' ? (
-										<Badge className="pt-1">Live</Badge>
-									) : match.status === 'upcoming' ? (
-										<Badge variant={'outline'} className="p-0 pt-1">
-											Upcoming
-										</Badge>
-									) : (
-										<Badge variant={'secondary'} className="p-0 pt-1">
-											Finished
-										</Badge>
-									)}
+									<Badge
+										variant={
+											match.status === 'ong'
+												? 'default'
+												: match.status === 'upcoming'
+													? 'outline'
+													: 'secondary'
+										}
+										className="pt-1"
+									>
+										{match.status === 'ongoing'
+											? 'Live'
+											: match.status === 'upcoming'
+												? 'Upcoming'
+												: 'Finished'}
+									</Badge>
 								</div>
-								<div className="flex items-center space-x-2">
-									<span className="text-muted-foreground text-sm">
-										{/* Wed Aug 14, 10:00:00 */}
+								<Badge variant={'outline'} className="pt-1 md:mt-1 mt-0">
+									{new Date(match.finished_at * 1000).toLocaleString('en-US', {
+										weekday: 'short',
+										month: 'short',
+										day: 'numeric',
+										hour: '2-digit',
+										minute: '2-digit',
+										hour12: true
+									})}
+								</Badge>
+								<Badge variant={'secondary'} className="pt-1 md:mt-1 mt-0">
+									{match.competition_name}
+								</Badge>
+							</div>
+							<div className="hidden md:flex flex-wrap justify-between items-center mt-2 text-sm w-full">
+								<div className="flex-1">
+									<Badge
+										variant={
+											match.status === 'ongoing'
+												? 'default'
+												: match.status === 'upcoming'
+													? 'outline'
+													: 'secondary'
+										}
+										className="pt-1"
+									>
+										{match.status === 'ongoing'
+											? 'Live'
+											: match.status === 'upcoming'
+												? 'Upcoming'
+												: 'Finished'}
+									</Badge>
+								</div>
+								<div className="flex-1 flex justify-center">
+									<Badge variant={'outline'} className="pt-1 ml-3">
 										{new Date(match.finished_at * 1000).toLocaleString('en-US', {
 											weekday: 'short',
 											month: 'short',
@@ -69,10 +124,10 @@ export default function Matches({ matches }: { matches: ChampionshipMatches['ite
 											minute: '2-digit',
 											hour12: true
 										})}
-									</span>
+									</Badge>
 								</div>
-								<div className="flex items-center justify-end space-x-2">
-									<Badge variant={'secondary'} className="p-0 pt-1">
+								<div className="flex-1 flex justify-end">
+									<Badge variant={'secondary'} className="pt-1">
 										{match.competition_name}
 									</Badge>
 								</div>
