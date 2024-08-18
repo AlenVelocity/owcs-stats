@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -33,7 +33,7 @@ export default function ChampionshipsList({ initialChampionships }: { initialCha
 
 	return (
 		<div className="w-full space-y-4">
-			<div className="flex justify-between items-center">
+			<div className="flex justify-between items-center p-2">
 				<h1 className="text-3xl font-bold">Tournaments</h1>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -73,33 +73,39 @@ export default function ChampionshipsList({ initialChampionships }: { initialCha
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredChampionships.reverse().map((championship) => (
-					<Link href={`/tournament/${championship.championship_id}`} key={championship.championship_id}>
-						<Card className="hover:bg-muted/50 transition-colors">
+					<Link
+						href={`/tournament/${championship.championship_id}`}
+						key={championship.championship_id}
+						className="h-full"
+					>
+						<Card className="hover:bg-muted/50 transition-colors h-full flex flex-col">
 							<CardHeader>
 								<CardTitle className="text-xl">{championship.name}</CardTitle>
 							</CardHeader>
-							<CardContent className="space-y-4">
-								<span className="flex items-center gap-2">
-									<Calendar className="w-4 h-4" />
-									<p className="text-sm text-muted-foreground">
-										{'Start: '}
-										{new Date(championship.championship_start * 1000).toLocaleString('en-US', {
-											month: 'long',
-											day: 'numeric',
-											hour: '2-digit',
-											minute: '2-digit'
-										})}
-									</p>
-								</span>
-								<span className="flex items-center gap-2">
-									<Users className="w-4 h-4" />
-									<p className="text-sm text-muted-foreground">
-										{`Participants: ${championship.current_subscriptions}`}
-									</p>
-								</span>
+							<CardContent className="space-y-4 flex-grow flex flex-col justify-between">
+								<div className="space-y-3">
+									<span className="flex items-center gap-2">
+										<Calendar className="w-4 h-4" />
+										<p className="text-sm text-muted-foreground">
+											{'Start: '}
+											{new Date(championship.championship_start * 1000).toLocaleString('en-US', {
+												month: 'long',
+												day: 'numeric',
+												hour: '2-digit',
+												minute: '2-digit'
+											})}
+										</p>
+									</span>
+									<span className="flex items-center gap-2">
+										<Users className="w-4 h-4" />
+										<p className="text-sm text-muted-foreground">
+											{`Participants: ${championship.current_subscriptions}`}
+										</p>
+									</span>
+								</div>
 								<Badge
 									className={cn(
-										'text-sm',
+										'text-sm self-start',
 										championship.status === 'join'
 											? 'bg-primary'
 											: championship.status === 'ongoing'
