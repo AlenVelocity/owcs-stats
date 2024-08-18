@@ -2,6 +2,8 @@ import { getMatch } from './actions'
 import Rounds from './rounds'
 import Overview from './overview'
 import MatchTabs from './tabs'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image'
 
 const teams = ['faction1', 'faction2']
 
@@ -19,7 +21,17 @@ export default async function MatchPage({ params }: { params: { id: string } }) 
 		<div className="container mx-auto my-4">
 			<div className="flex flex-col md:flex-row items-center mb-6 w-full justify-between">
 				<div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0 md:mr-4">
-					<img src={match.details.teams[teams[0]].avatar} alt={`logo`} className="w-16 h-16" />
+					<Avatar className="md:w-8 md:h-8 w-10 h-10">
+						<AvatarImage
+							src={match.details.teams[teams[0]].avatar || '/assets/ow.png'}
+							alt={`logo`}
+							width={40}
+							height={40}
+						/>
+						<AvatarFallback>
+							<Image src="/assets/ow.png" alt="OW logo" width={40} height={40} />
+						</AvatarFallback>
+					</Avatar>
 					<div className="text-center md:text-left">
 						<h2 className="text-xl font-bold">{match.details.teams[teams[0]].name}</h2>
 						<p className="text-3xl font-bold text-green-500">{match.details.results.score[teams[0]]}</p>
@@ -45,11 +57,17 @@ export default async function MatchPage({ params }: { params: { id: string } }) 
 							{match.details.results.score[teams[1]]}
 						</p>
 					</div>
-					<img
-						src={match.details.teams[teams[1]].avatar || '/assets/ow.png'}
-						alt={`logo`}
-						className="w-16 h-16"
-					/>
+					<Avatar className="md:w-8 md:h-8 w-10 h-10">
+						<AvatarImage
+							src={match.details.teams[teams[1]].avatar || '/assets/ow.png'}
+							alt={`logo`}
+							width={40}
+							height={40}
+						/>
+						<AvatarFallback>
+							<Image src="/assets/ow.png" alt="OW logo" width={40} height={40} />
+						</AvatarFallback>
+					</Avatar>
 				</div>
 			</div>
 

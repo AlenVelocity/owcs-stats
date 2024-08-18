@@ -309,8 +309,19 @@ type MatchStats = {
 	}[]
 }
 
+export type OrganizerChampionships = {
+	items: ChampionshipDetails[]
+}
+
 class FaceitClient {
 	constructor(private readonly apiKey: string = process.env.FACEIT_API_KEY || '') {}
+
+	public async getChampionships(
+		organizerId: string,
+		{ offset = 0, limit = 100 }: { offset?: number; limit?: number }
+	): Promise<OrganizerChampionships> {
+		return await this._makeRequest(`/organizers/${organizerId}/championships`, 'GET', { offset, limit })
+	}
 
 	public async getMatches(
 		championshipId: string,
@@ -368,6 +379,7 @@ class FaceitClient {
 		const response = await fetch(url.toString(), options)
 
 		if (!response.ok) {
+			console.error(await response.json())
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
 

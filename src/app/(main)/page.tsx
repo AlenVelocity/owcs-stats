@@ -1,14 +1,15 @@
-import { fetchMatches } from './actions'
-import MatchesList from './MatchesList'
+import { fetchChampionships } from './actions'
+import ChampionshipsList from './ChampionshipsList'
 
 export default async function Home() {
-	const initialMatches = await fetchMatches(process.env.CHAMPIONSHIP_ID as string, 'all', 0, 10)
+	const initialChampionships = await fetchChampionships(process.env.FACEIT_ORGANIZER_ID!, {
+		offset: 29,
+		limit: 29
+	})
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between p-5 md:p-12">
-			<div className="w-full space-y-4">
-				<MatchesList initialMatches={initialMatches} />
-			</div>
+			<ChampionshipsList initialChampionships={initialChampionships.items} />
 		</main>
 	)
 }

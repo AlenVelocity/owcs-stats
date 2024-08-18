@@ -6,10 +6,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Matches from './Matches'
 import { fetchMatches } from './actions'
 import { ChampionshipMatches } from '@/lib/faceit'
-import { Island_Moments } from 'next/font/google'
 import { CircleDotIcon } from 'lucide-react'
 
-export default function MatchesList({ initialMatches }: { initialMatches: ChampionshipMatches }) {
+export default function MatchesList({
+	initialMatches,
+	tournamentId
+}: {
+	initialMatches: ChampionshipMatches
+	tournamentId: string
+}) {
 	const [matches, setMatches] = useState(initialMatches.items)
 	const [offset, setOffset] = useState(10)
 	const [isLoading, setIsLoading] = useState(false)
@@ -17,7 +22,7 @@ export default function MatchesList({ initialMatches }: { initialMatches: Champi
 
 	const loadMore = async () => {
 		setIsLoading(true)
-		const newMatches = await fetchMatches('32271a28-7b4c-465d-a928-9e84e9391495', type, offset, 10)
+		const newMatches = await fetchMatches(tournamentId, type, offset, 10)
 		setMatches([...matches, ...newMatches.items])
 		setOffset(offset + 10)
 		setIsLoading(false)
@@ -25,7 +30,7 @@ export default function MatchesList({ initialMatches }: { initialMatches: Champi
 
 	const handleTypeChange = async (newType: 'all' | 'upcoming' | 'ongoing' | 'past') => {
 		setType(newType)
-		const filteredMatches = await fetchMatches('32271a28-7b4c-465d-a928-9e84e9391495', newType, 0, 10)
+		const filteredMatches = await fetchMatches(tournamentId, newType, 0, 10)
 		setMatches(filteredMatches.items)
 		setOffset(10)
 	}

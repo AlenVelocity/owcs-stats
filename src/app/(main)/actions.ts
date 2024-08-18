@@ -4,17 +4,11 @@ import FaceitClient from '@/lib/faceit'
 
 const faceit = new FaceitClient()
 
-export async function fetchMatches(
-	championshipId: string,
-	type: 'all' | 'upcoming' | 'ongoing' | 'past' = 'all',
-	offset: number = 0,
-	limit: number = 100
+export async function fetchChampionships(
+	organizerId: string,
+	{ offset = 0, limit = 100 }: { offset?: number; limit?: number }
 ) {
-	const matches = await faceit.getMatches(championshipId, {
-		type,
-		offset,
-		limit
-	})
+	const championships = await faceit.getChampionships(organizerId, { offset, limit })
 
-	return matches
+	return championships
 }

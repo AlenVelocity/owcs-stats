@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChampionshipMatches } from '@/lib/faceit'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
 export default function Matches({ matches }: { matches: ChampionshipMatches['items'] }) {
 	const teams = ['faction1', 'faction2']
@@ -15,16 +16,20 @@ export default function Matches({ matches }: { matches: ChampionshipMatches['ite
 								{teams.map((team, index) => (
 									<>
 										{index === 0 && (
-											<Image
-												src={match.teams[team].avatar || '/assets/ow.png'}
-												alt={`${match.teams[team].name} logo`}
-												width={40}
-												height={40}
-												className="md:w-8 md:h-8 w-10 h-10"
-											/>
+											<Avatar className="md:w-8 md:h-8 w-10 h-10">
+												<AvatarImage
+													src={match.teams[team].avatar || '/assets/ow.png'}
+													alt={`logo`}
+													width={40}
+													height={40}
+												/>
+												<AvatarFallback>
+													<Image src="/assets/ow.png" alt="OW logo" width={40} height={40} />
+												</AvatarFallback>
+											</Avatar>
 										)}
 										<div
-											className={`flex flex-col md:flex-row items-center ${index === 1 ? 'flex-row-reverse md:justify-end' : ''}`}
+											className={`md:gap-2 gap-4 flex flex-col md:flex-row items-center ${index === 1 ? 'flex-row-reverse md:justify-end' : ''}`}
 										>
 											<span
 												className={`font-semibold truncate ${index === 1 ? 'md:text-right' : ''}`}
@@ -32,13 +37,22 @@ export default function Matches({ matches }: { matches: ChampionshipMatches['ite
 												{match.teams[team].name}
 											</span>
 											{index === 1 && (
-												<Image
-													src={match.teams[team].avatar || '/assets/ow.png'}
-													alt={`${match.teams[team].name} logo`}
-													width={40}
-													height={40}
-													className="md:w-8 md:h-8 w-10 h-10 mt-2 md:mt-0 md:ml-2"
-												/>
+												<Avatar className="md:w-8 md:h-8 w-10 h-10">
+													<AvatarImage
+														src={match.teams[team].avatar || '/assets/ow.png'}
+														alt={`logo`}
+														width={40}
+														height={40}
+													/>
+													<AvatarFallback>
+														<Image
+															src="/assets/ow.png"
+															alt="OW logo"
+															width={40}
+															height={40}
+														/>
+													</AvatarFallback>
+												</Avatar>
 											)}
 										</div>
 										{index === 0 && (
@@ -95,42 +109,36 @@ export default function Matches({ matches }: { matches: ChampionshipMatches['ite
 									{match.competition_name}
 								</Badge>
 							</div>
-							<div className="hidden md:flex flex-wrap justify-between items-center mt-2 text-sm w-full">
-								<div className="flex-1">
-									<Badge
-										variant={
-											match.status === 'ongoing'
-												? 'default'
-												: match.status === 'upcoming'
-													? 'outline'
-													: 'secondary'
-										}
-										className="pt-1"
-									>
-										{match.status === 'ongoing'
-											? 'Live'
+							<div className="hidden md:flex flex-wrap justify-center items-center mt-2 text-sm w-full">
+								<Badge
+									variant={
+										match.status === 'ongoing'
+											? 'default'
 											: match.status === 'upcoming'
-												? 'Upcoming'
-												: 'Finished'}
-									</Badge>
-								</div>
-								<div className="flex-1 flex justify-center">
-									<Badge variant={'outline'} className="pt-1 ml-3">
-										{new Date(match.finished_at * 1000).toLocaleString('en-US', {
-											weekday: 'short',
-											month: 'short',
-											day: 'numeric',
-											hour: '2-digit',
-											minute: '2-digit',
-											hour12: true
-										})}
-									</Badge>
-								</div>
-								<div className="flex-1 flex justify-end">
-									<Badge variant={'secondary'} className="pt-1">
-										{match.competition_name}
-									</Badge>
-								</div>
+												? 'outline'
+												: 'secondary'
+									}
+									className="pt-1 w-1/3 justify-start"
+								>
+									{match.status === 'ongoing'
+										? 'Live'
+										: match.status === 'upcoming'
+											? 'Upcoming'
+											: 'Finished'}
+								</Badge>
+								<Badge variant={'outline'} className="pt-1 w-1/3 justify-center">
+									{new Date(match.finished_at * 1000).toLocaleString('en-US', {
+										weekday: 'short',
+										month: 'short',
+										day: 'numeric',
+										hour: '2-digit',
+										minute: '2-digit',
+										hour12: true
+									})}
+								</Badge>
+								<Badge variant={'secondary'} className="pt-1 w-1/3 justify-end">
+									{match.competition_name}
+								</Badge>
 							</div>
 						</Link>
 					</li>
