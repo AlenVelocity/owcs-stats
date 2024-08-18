@@ -1,6 +1,6 @@
-# Overwatch Championship Series Stats Wrapper
+# Overwatch Champions Series Stats Wrapper
 
-Basic stats wrapper for Overwatch Championship Series.
+Basic stats wrapper for Overwatch Champions Series.
 
 -   Fetches matches from the Faceit API
 -   Displays matches in a list
