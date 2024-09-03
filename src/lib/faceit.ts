@@ -379,8 +379,8 @@ class FaceitClient {
 		const response = await fetch(url.toString(), options)
 
 		if (!response.ok) {
-			console.error(await response.json())
-			throw new Error(`HTTP error! status: ${response.status}`)
+			const error = await response.json()
+			throw error
 		}
 
 		return await response.json()
