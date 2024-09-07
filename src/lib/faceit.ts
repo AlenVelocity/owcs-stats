@@ -376,7 +376,7 @@ class FaceitClient {
 			})
 		}
 
-		const response = await fetch(url.toString(), options)
+		const response = await fetch(url.toString(), { cache: 'no-store', ...options })
 
 		if (!response.ok) {
 			const error = await response.json()
