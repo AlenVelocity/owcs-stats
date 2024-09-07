@@ -5,7 +5,7 @@ import { MatchDetails, MatchStats } from '@/lib/faceit'
 
 export default function Overview({ match }: { match: { details: MatchDetails; stats: MatchStats } }) {
 	const [sortColumn, setSortColumn] = useState<keyof (typeof overallStats)[0]>('eliminations')
-	const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+	const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
 	const [groupBy, setGroupBy] = useState<'none' | 'team'>('team')
 
 	const handleSort = (column: keyof (typeof overallStats)[0]) => {
