@@ -167,7 +167,7 @@ export default function Overview({ match }: { match: { details: MatchDetails; st
 								<TableCell>{player.damage}</TableCell>
 								<TableCell>{player.healing}</TableCell>
 								<TableCell>{player.mitigation}</TableCell>
-								<TableCell>{player.kd.toFixed(2)}</TableCell>
+								<TableCell>{(player.eliminations / player.deaths).toFixed(2)}</TableCell>
 							</TableRow>
 						)
 					)}
