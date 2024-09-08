@@ -1,16 +1,29 @@
 import { getMatch } from './actions'
-import Rounds from './rounds'
-import Overview from './overview'
+import { Metadata } from 'next'
+
 import MatchTabs from './tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Image from 'next/image'
 
 const teams = ['faction1', 'faction2']
 
-export const generateMetadata = async ({ params }: { params: { id: string } }) => {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const match = await getMatch(params.id)
+	const title = `${match.details.teams.faction1.name} vs ${match.details.teams.faction2.name}`
+	const description = `Match overview for ${title}`
+
 	return {
-		title: `${match.details.teams[teams[0]].name} vs ${match.details.teams[teams[1]].name}`
+		title,
+		description,
+		openGraph: {
+			title,
+			description
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title,
+			description
+		}
 	}
 }
 

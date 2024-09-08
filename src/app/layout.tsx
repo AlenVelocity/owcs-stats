@@ -8,8 +8,18 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-	title: 'OWCS Stats',
-	description: 'Overwatch Champions Series Stats Simplified'
+	title: {
+		template: '%s | OWCS Stats',
+		default: 'OWCS Stats'
+	},
+	description: 'Overwatch Champions Series Stats Simplified',
+	openGraph: {
+		title: {
+			template: '%s | OWCS Stats',
+			default: 'OWCS Stats'
+		},
+		description: 'Overwatch Champions Series Stats Simplified'
+	}
 }
 
 export default function RootLayout({
