@@ -31,7 +31,7 @@ export default async function MatchPage({ params }: { params: { id: string } }) 
 	const match = await getMatch(params.id)
 
 	return (
-		<div className="container mx-auto my-4">
+		<div className="mx-4 md:container md:mx-auto my-4">
 			<div className="flex flex-col md:flex-row items-center mb-6 w-full justify-between">
 				<div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0 md:mr-4">
 					<Avatar className="md:w-8 md:h-8 w-10 h-10">

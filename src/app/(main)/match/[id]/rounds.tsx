@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { Label } from '@/components/ui/label'
 
 const teams = ['faction1', 'faction2']
 
@@ -77,8 +78,8 @@ export default function Rounds({ match }: { match: { details: MatchDetails; stat
 
 	return (
 		<Tabs value={`round-${activeRound}`}>
-			<div className="mb-4 flex justify-between items-center">
-				<TabsList className="space-x-2">
+			<div className="mb-4 flex flex-col md:flex-row justify-between md:items-center space-y-4 md:space-y-0">
+				<TabsList className="space-x-2 justify-start w-auto">
 					<span className="text-sm font-semibold mr-2">Round</span>
 					{match.stats.rounds.map((round, index) => (
 						<TabsTrigger
@@ -97,7 +98,7 @@ export default function Rounds({ match }: { match: { details: MatchDetails; stat
 						checked={showFaceitNames}
 						onCheckedChange={handleShowFaceitNamesChange}
 					/>
-					<label htmlFor="showFaceitNames">Show Faceit ID</label>
+					<Label htmlFor="showFaceitNames">Faceit IDs</Label>
 				</div>
 			</div>
 			<div className="space-y-4">

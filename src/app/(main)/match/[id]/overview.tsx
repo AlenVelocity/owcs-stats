@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { MatchDetails, MatchStats } from '@/lib/faceit'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -168,18 +169,18 @@ export default function Overview({ match }: { match: { details: MatchDetails; st
 					<SelectTrigger className="w-[180px]">
 						<SelectValue placeholder="Group by" />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent className="order-2 md:order-1">
 						<SelectItem value="none">No Grouping</SelectItem>
 						<SelectItem value="team">Group by Team</SelectItem>
 					</SelectContent>
 				</Select>
-				<div className="flex items-center space-x-2">
+				<div className="flex items-center space-x-2 order-2 md:order-1">
 					<Checkbox
 						id="showFaceitNames"
 						checked={showFaceitNames}
 						onCheckedChange={handleShowFaceitNamesChange}
 					/>
-					<label htmlFor="showFaceitNames">Show Faceit ID</label>
+					<Label htmlFor="showFaceitNames">Faceit IDs</Label>
 				</div>
 			</div>
 			<Table>
