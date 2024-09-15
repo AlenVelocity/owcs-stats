@@ -10,7 +10,7 @@ const teams = ['faction1', 'faction2']
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const match = await getMatch(params.id)
 	const title = `${match.details.teams.faction1.name} vs ${match.details.teams.faction2.name}`
-	const description = `Match overview for ${title}`
+	const description = `${match.details.competition_name} - ${title} Match Overview`
 
 	return {
 		title,

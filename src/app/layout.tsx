@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 			template: '%s | OWCS Stats',
 			default: 'OWCS Stats'
 		},
+		images: ['/og-image.png'],
 		description: 'Overwatch Champions Series Stats Simplified'
 	}
 }
