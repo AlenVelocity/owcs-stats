@@ -10,19 +10,24 @@ import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/components/ui/use-toast'
+import { Button } from '@/components/ui/button'
+import { CopyCheckIcon, CopyIcon } from 'lucide-react'
 
 const teams = ['faction1', 'faction2']
 
 export default function Rounds({ match }: { match: { details: MatchDetails; stats: MatchStats } }) {
 	const searchParams = useSearchParams()
 	const router = useRouter()
+	const { toast } = useToast()
 	const [activeRound, setActiveRound] = useState(1)
 	const [showFaceitNames, setShowFaceitNames] = useState(
 		searchParams.get('showFaceit') ? searchParams.get('showFaceit') === 'true' : false
 	)
 	const maps = match.details.voting.map.entities.filter((map) => match.details.voting.map.pick.includes(map.guid))
 	const roundStats = match.stats.rounds.map((round) => round.round_stats)
-
+	const [copyCount, setCopyCount] = useState(0)
+	const [showCopyCheck, setShowCopyCheck] = useState(false)
 	useEffect(() => {
 		const roundParam = searchParams.get('round')
 		if (roundParam) {
@@ -42,6 +47,25 @@ export default function Rounds({ match }: { match: { details: MatchDetails; stat
 		params.set('showFaceit', showFaceitNames.toString())
 		router.replace(`?${params.toString()}`)
 	}, [showFaceitNames, router, searchParams])
+
+	const handleCopyLink = () => {
+		const url = new URL(window.location.href)
+		const linkToCopy = copyCount === 0 ? url.origin + url.pathname + '?tab=rounds' : window.location.href
+		navigator.clipboard.writeText(linkToCopy)
+		toast({
+			description: (
+				<div className="flex items-center">
+					<CopyIcon className="w-4 h-4 mr-2" />
+					{copyCount === 0
+						? 'Basic link copied. Click again to copy full link.'
+						: 'Full link copied to clipboard'}
+				</div>
+			)
+		})
+		setCopyCount((prev) => (prev + 1) % 2)
+		setShowCopyCheck(true)
+		setTimeout(() => setShowCopyCheck(false), 2000) // Show check icon for 2 seconds
+	}
 
 	const stats = match.stats.rounds.map((round) =>
 		round.teams.flatMap((team) =>
@@ -92,13 +116,20 @@ export default function Rounds({ match }: { match: { details: MatchDetails; stat
 						</TabsTrigger>
 					))}
 				</TabsList>
-				<div className="flex items-center space-x-2">
-					<Checkbox
-						id="showFaceitNames"
-						checked={showFaceitNames}
-						onCheckedChange={handleShowFaceitNamesChange}
-					/>
-					<Label htmlFor="showFaceitNames">Faceit IDs</Label>
+				<div className="flex items-center space-x-2 order-2 justify-between md:order-1">
+					<div className="flex items-center space-x-2">
+						<Checkbox
+							id="showFaceitNames"
+							checked={showFaceitNames}
+							onCheckedChange={handleShowFaceitNamesChange}
+						/>
+						<Label htmlFor="showFaceitNames">Faceit IDs</Label>
+					</div>
+					<div className="flex items-center space-x-2">
+						<Button size="icon" variant={'ghost'} onClick={handleCopyLink}>
+							{showCopyCheck ? <CopyCheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+						</Button>
+					</div>
 				</div>
 			</div>
 			<div className="space-y-4">

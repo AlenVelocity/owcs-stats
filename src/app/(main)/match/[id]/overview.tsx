@@ -9,6 +9,10 @@ import { MatchDetails, MatchStats } from '@/lib/faceit'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
+import { CopyIcon, CopyCheckIcon } from 'lucide-react'
+
 type OverallStats = {
 	nickname: string
 	ign: string
@@ -29,12 +33,15 @@ const roleOrder = { Tank: 1, Damage: 2, Support: 3 }
 export default function Overview({ match }: { match: { details: MatchDetails; stats: MatchStats } }) {
 	const searchParams = useSearchParams()
 	const router = useRouter()
+	const { toast } = useToast()
 	const [groupBy, setGroupBy] = useState<'none' | 'team'>((searchParams.get('groupBy') as 'none' | 'team') || 'team')
 	const [showFaceitNames, setShowFaceitNames] = useState(searchParams.get('showFaceit') === 'true')
 	const [sortColumn, setSortColumn] = useState<string>(searchParams.get('sortColumn') || 'role')
 	const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(
 		(searchParams.get('sortDirection') as 'asc' | 'desc') || 'asc'
 	)
+	const [copyCount, setCopyCount] = useState(0)
+	const [showCopyCheck, setShowCopyCheck] = useState(false)
 
 	useEffect(() => {
 		const params = new URLSearchParams(searchParams)
@@ -60,6 +67,25 @@ export default function Overview({ match }: { match: { details: MatchDetails; st
 			setSortColumn(column)
 			setSortDirection('desc')
 		}
+	}
+
+	const handleCopyLink = () => {
+		const url = new URL(window.location.href)
+		const linkToCopy = copyCount === 0 ? url.origin + url.pathname : window.location.href
+		navigator.clipboard.writeText(linkToCopy)
+		toast({
+			description: (
+				<div className="flex items-center">
+					<CopyIcon className="w-4 h-4 mr-2" />
+					{copyCount === 0
+						? 'Basic link copied. Click again to copy full link.'
+						: 'Full link copied to clipboard'}
+				</div>
+			)
+		})
+		setCopyCount((prev) => (prev + 1) % 2)
+		setShowCopyCheck(true)
+		setTimeout(() => setShowCopyCheck(false), 2000) // Show check icon for 2 seconds
 	}
 
 	const overallStats = useMemo(() => {
@@ -175,12 +201,19 @@ export default function Overview({ match }: { match: { details: MatchDetails; st
 					</SelectContent>
 				</Select>
 				<div className="flex items-center space-x-2 order-2 md:order-1">
-					<Checkbox
-						id="showFaceitNames"
-						checked={showFaceitNames}
-						onCheckedChange={handleShowFaceitNamesChange}
-					/>
-					<Label htmlFor="showFaceitNames">Faceit IDs</Label>
+					<div className="flex items-center space-x-2">
+						<Checkbox
+							id="showFaceitNames"
+							checked={showFaceitNames}
+							onCheckedChange={handleShowFaceitNamesChange}
+						/>
+						<Label htmlFor="showFaceitNames">Faceit IDs</Label>
+					</div>
+					<div className="flex items-center space-x-2">
+						<Button size="icon" variant={'ghost'} onClick={handleCopyLink}>
+							{showCopyCheck ? <CopyCheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+						</Button>
+					</div>
 				</div>
 			</div>
 			<Table>
